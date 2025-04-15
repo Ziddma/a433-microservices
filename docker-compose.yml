@@ -8,7 +8,7 @@ services:
     restart: always # Restart container jika berhenti
 
   item-app:
-    image: ghcr.io/USERNAME/item-app:v1 # Gunakan image dari GitHub Packages
+    image: ghcr.io/ziddma/item-app:v1 # Gunakan image dari GitHub Packages
     ports:
       - '80:8080' # Map port 8080 di container ke port 80 di host
     depends_on:

@@ -7,11 +7,11 @@ docker build -t item-app:v1 .
 docker images
 
 # Ganti tag agar sesuai dengan GitHub Packages (ganti USERNAME dengan GitHub username Anda)
-docker tag item-app:v1 ghcr.io/USERNAME/item-app:v1
+docker tag item-app:v1 ghcr.io/ziddma/item-app:v1
 
 # Login ke GitHub Container Registry (GitHub Packages)
-echo $CR_PAT | docker login ghcr.io -u USERNAME --password-stdin
+echo $CR_PAT | docker login ghcr.io -u ziddma --password-stdin
 # Note: CR_PAT adalah personal access token GitHub yang disimpan sebagai environment variable
 
 # Push image ke GitHub Container Registry
-docker push ghcr.io/USERNAME/item-app:v1
+docker push ghcr.io/ziddma/item-app:v1
