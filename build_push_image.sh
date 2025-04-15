@@ -1,27 +1,17 @@
 #!/bin/bash
 
-# Nama image dan tag
-IMAGE_NAME="item-app"
-TAG="v1"
-GITHUB_USERNAME="ziddma"
-GITHUB_REPO="a433-microservices"
+# Bangun image Docker dari Dockerfile dengan nama item-app dan tag v1
+docker build -t item-app:v1 .
 
-# Tag lengkap untuk GitHub Container Registry
-FULL_IMAGE="ghcr.io/$GITHUB_USERNAME/$GITHUB_REPO/$IMAGE_NAME:$TAG"
-
-# Build image dari Dockerfile
-docker build -t $IMAGE_NAME:$TAG .
-
-# Menampilkan daftar image lokal
+# Tampilkan daftar image yang tersedia di lokal
 docker images
 
-# Tag image ke format GHCR
-echo "Menandai image sebagai $FULL_IMAGE"
-docker tag $IMAGE_NAME:$TAG $FULL_IMAGE
+# Ganti tag agar sesuai dengan GitHub Packages (ganti USERNAME dengan GitHub username Anda)
+docker tag item-app:v1 ghcr.io/USERNAME/item-app:v1
 
-# Login ke GitHub Container Registry
-echo "Masukkan Personal Access Token GitHub:"
-docker login ghcr.io -u $GITHUB_USERNAME --password-stdin
+# Login ke GitHub Container Registry (GitHub Packages)
+echo $CR_PAT | docker login ghcr.io -u USERNAME --password-stdin
+# Note: CR_PAT adalah personal access token GitHub yang disimpan sebagai environment variable
 
-# Push image ke GHCR
-docker push $FULL_IMAGE
+# Push image ke GitHub Container Registry
+docker push ghcr.io/USERNAME/item-app:v1

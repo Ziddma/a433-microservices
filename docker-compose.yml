@@ -1,23 +1,19 @@
-version: '3.8' # Versi 3 atau lebih
+version: '2.4' # Gunakan Docker Compose versi 2 atau lebih baru
 
 services:
-  item-app:
-    image: ghcr.io/ziddma/a433-microservices/item-app:v1
-    ports:
-      - '80:8080'
-    depends_on:
-      - item-db
-    restart: always # Restart policy
-    environment:
-      DB_HOST: item-db
-      DB_NAME: item-app-db
-      NODE_ENV: production
-
   item-db:
-    image: mongo:3
+    image: mongo:3 # Gunakan image mongo versi 3
     volumes:
-      - app-db:/data/db
-    restart: always # Restart policy
+      - app-db:/data/db # Mount volume app-db ke /data/db
+    restart: always # Restart container jika berhenti
+
+  item-app:
+    image: ghcr.io/USERNAME/item-app:v1 # Gunakan image dari GitHub Packages
+    ports:
+      - '80:8080' # Map port 8080 di container ke port 80 di host
+    depends_on:
+      - item-db # Pastikan item-app hanya berjalan setelah item-db siap
+    restart: always # Restart container jika berhenti
 
 volumes:
-  app-db: #  Volume untuk menyimpan data MongoDB
+  app-db: # Definisikan volume bernama app-db

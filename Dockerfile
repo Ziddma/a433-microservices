@@ -1,20 +1,21 @@
-# Menggunakan base image Node.js versi 14.
+# Gunakan image Node.js versi 14 sebagai base image
 FROM node:14
 
-# Menentukan bahwa working directory untuk container adalah /app.
+# Tentukan direktori kerja di dalam container
 WORKDIR /app
 
-# Menyalin seluruh source code ke working directory di container.
+# Salin semua file project ke dalam container
 COPY . .
 
-# Environment prod dan database host
-ENV NODE_ENV=production DB_HOST=item-db
+# Tentukan environment untuk production dan host database
+ENV NODE_ENV=production
+ENV DB_HOST=item-db
 
-# Dependencies untuk prod dan build app 
+# Install dependencies untuk production dan build aplikasi
 RUN npm install --production --unsafe-perm && npm run build
 
-# Expose port 8080
+# Buka port 8080 agar bisa diakses dari luar container
 EXPOSE 8080
 
-# Command server start saat container berhasil dibuat
+# Jalankan server saat container dijalankan
 CMD ["npm", "start"]
