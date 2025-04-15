@@ -4,15 +4,15 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
 var lessMiddleware = require('less-middleware');
-var MongoClient = require('mongodb').MongoClient
-  , assert = require('assert');
+var MongoClient = require('mongodb').MongoClient,
+  assert = require('assert');
 
-var host = process.env.DB_HOST ? process.env.DB_HOST : 'localhost';
-var url = 'mongodb://' + host + ':27017/accumulator';
+var dbName = process.env.DB_NAME ? process.env.DB_NAME : 'accumulator';
+var url = 'mongodb://' + host + ':27017/' + dbName;
 var db;
 var index = require('./routes/index');
 
-process.title = "ca-app";
+process.title = 'ca-app';
 
 var environment = process.env.NODE_ENV ? process.env.NODE_ENV : 'development';
 environment = environment.trim();
@@ -22,7 +22,7 @@ var app = express();
 
 MongoClient.connect(url, function (err, mongoDb) {
   assert.equal(null, err);
-  console.log("Connected to database");
+  console.log('Connected to database');
 
   db = mongoDb;
 });
@@ -33,7 +33,6 @@ app.set('view engine', 'jade');
 if (environment === 'development') {
   app.locals.pretty = true;
 }
-
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -55,19 +54,19 @@ var insertDocument = function (db, document, callback) {
 var findAllDocuments = function (db, callback) {
   var collection = db.collection('documents');
   collection.find({}).toArray(function (err, result) {
-    if(result) {
+    if (result) {
       result = result.reverse();
     }
     callback(err, result);
   });
-}
+};
 
 // Insert message
 app.post('/api', function (req, res) {
   var data = req.body;
   insertDocument(db, data, function (err, result) {
-    res.status(201).send(result)
-  })
+    res.status(201).send(result);
+  });
 });
 
 // Get messages
