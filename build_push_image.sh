@@ -1,17 +1,16 @@
 #!/bin/bash
 
-# Bangun image Docker dari Dockerfile dengan nama item-app dan tag v1
+# Build Docker image dengan nama dan tag sesuai
 docker build -t item-app:v1 .
 
-# Tampilkan daftar image yang tersedia di lokal
+# Lihat daftar image
 docker images
 
-# Ganti tag agar sesuai dengan GitHub Packages (ganti USERNAME dengan GitHub username Anda)
-docker tag item-app:v1 ghcr.io/ziddma/item-app:v1
+# Retag agar sesuai dengan GitHub Container Registry tujuan
+docker tag item-app:v1 ghcr.io/ziddma/a433-microservices/item-app:v1
 
-# Login ke GitHub Container Registry (GitHub Packages)
+# Login ke GitHub Container Registry (dengan PAT)
 echo $CR_PAT | docker login ghcr.io -u ziddma --password-stdin
-# Note: CR_PAT adalah personal access token GitHub yang disimpan sebagai environment variable
 
 # Push image ke GitHub Container Registry
-docker push ghcr.io/ziddma/item-app:v1
+docker push ghcr.io/ziddma/a433-microservices/item-app:v1
