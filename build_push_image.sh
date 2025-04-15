@@ -6,18 +6,22 @@ TAG="v1"
 GITHUB_USERNAME="ziddma"
 GITHUB_REPO="a433-microservices"
 
-# Build Docker image dari Dockerfile
+# Tag lengkap untuk GitHub Container Registry
+FULL_IMAGE="ghcr.io/$GITHUB_USERNAME/$GITHUB_REPO/$IMAGE_NAME:$TAG"
+
+# Build image dari Dockerfile
 docker build -t $IMAGE_NAME:$TAG .
 
-# Melihat daftar image di lokal
+# Menampilkan daftar image lokal
 docker images
 
-# Menandai ulang image agar sesuai dengan format GitHub Container Registry
-docker tag $IMAGE_NAME:$TAG ghcr.io/$GITHUB_USERNAME/$GITHUB_REPO/$IMAGE_NAME:$TAG
+# Tag image ke format GHCR
+echo "Menandai image sebagai $FULL_IMAGE"
+docker tag $IMAGE_NAME:$TAG $FULL_IMAGE
 
 # Login ke GitHub Container Registry
-echo "Masukkan token GitHub Anda untuk login ke GitHub Container Registry:"
+echo "🔐 Masukkan Personal Access Token GitHub:"
 docker login ghcr.io -u $GITHUB_USERNAME --password-stdin
 
-# Push image ke GitHub Container Registry
-docker push ghcr.io/$GITHUB_USERNAME/$GITHUB_REPO/$IMAGE_NAME:$TAG
+# Push image ke GHCR
+docker push $FULL_IMAGE
