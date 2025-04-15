@@ -20,7 +20,7 @@ echo "Menandai image sebagai $FULL_IMAGE"
 docker tag $IMAGE_NAME:$TAG $FULL_IMAGE
 
 # Login ke GitHub Container Registry
-echo "🔐 Masukkan Personal Access Token GitHub:"
+echo "Masukkan Personal Access Token GitHub:"
 docker login ghcr.io -u $GITHUB_USERNAME --password-stdin
 
 # Push image ke GHCR
