@@ -10,6 +10,7 @@ services:
     restart: always # Restart policy
     environment:
       DB_HOST: item-db
+      DB_NAME: item-app-db
       NODE_ENV: production
 
   item-db:
