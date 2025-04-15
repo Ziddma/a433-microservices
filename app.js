@@ -7,7 +7,7 @@ var lessMiddleware = require('less-middleware');
 var MongoClient = require('mongodb').MongoClient,
   assert = require('assert');
 
-var dbName = process.env.DB_NAME ? process.env.DB_NAME : 'accumulator';
+var host = process.env.DB_HOST ? process.env.DB_HOST : 'localhost';
 var url = 'mongodb://' + host + ':27017/' + dbName;
 var db;
 var index = require('./routes/index');
