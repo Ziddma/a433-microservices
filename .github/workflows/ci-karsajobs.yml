@@ -13,11 +13,22 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v3
 
+      - name: Debug directory structure
+        run: |
+          echo "Current working directory:"
+          pwd
+          echo "Contents of current directory:"
+          ls -l
+          echo "Contents of cmd directory:"
+          ls -l cmd || echo "cmd directory not found"
+          echo "Contents of pkg directory:"
+          ls -l pkg || echo "pkg directory not found"
+
       - name: Install Hadolint and Lint Dockerfile
         run: |
-          wget -O hadolint https://github.com/hadolint/hadolint/releases/latest/download/hadolint-Linux-x86_64
-          chmod +x hadolint
-          ./hadolint Dockerfile
+          sudo wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/latest/download/hadolint-Linux-x86_64
+          sudo chmod +x /bin/hadolint
+          hadolint Dockerfile
 
       - name: Set up Go
         uses: actions/setup-go@v4
@@ -27,7 +38,7 @@ jobs:
       - name: Run unit tests
         run: go test -v -short --count=1 ./cmd/... ./pkg/...
 
-      - name: Login to GitHub Container Registry
+      - name: Login to GHCR
         run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ secrets.GHCR_USERNAME }} --password-stdin
 
       - name: Build and push Docker image
