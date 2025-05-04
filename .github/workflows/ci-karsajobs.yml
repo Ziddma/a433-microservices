@@ -19,15 +19,12 @@ jobs:
           pwd
           echo "Contents of current directory:"
           ls -l
-          echo "Contents of karsajobs directory:"
-          ls -l karsajobs
 
       - name: Install Hadolint and Lint Dockerfile
         run: |
           sudo wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/latest/download/hadolint-Linux-x86_64
           sudo chmod +x /bin/hadolint
           hadolint Dockerfile
-        working-directory: ./karsajobs
 
       - name: Set up Go
         uses: actions/setup-go@v4
@@ -36,7 +33,6 @@ jobs:
 
       - name: Run unit tests
         run: go test -v -short --count=1 $(go list ./...)
-        working-directory: ./karsajobs
 
       - name: Login to GHCR
         run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ secrets.GHCR_USERNAME }} --password-stdin
@@ -45,4 +41,3 @@ jobs:
         run: |
           docker build -t ghcr.io/${{ secrets.GHCR_USERNAME }}/karsajobs:latest .
           docker push ghcr.io/${{ secrets.GHCR_USERNAME }}/karsajobs:latest
-        working-directory: ./karsajobs
