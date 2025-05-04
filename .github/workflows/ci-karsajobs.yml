@@ -13,12 +13,14 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v3
 
+      - name: Verify directory structure
+        run: ls -lah && ls -lah karsajobs
+
       - name: Lint Dockerfile with Hadolint
         run: |
           wget -O hadolint https://github.com/hadolint/hadolint/releases/latest/download/hadolint-Linux-x86_64
           chmod +x hadolint
-          ./hadolint Dockerfile
-        working-directory: ./karsajobs
+          ./hadolint karsajobs/Dockerfile
 
       - name: Set up Go
         uses: actions/setup-go@v4
@@ -26,14 +28,15 @@ jobs:
           go-version: 1.20
 
       - name: Run unit tests
-        run: go test -v -short --count=1 $(go list ./...)
-        working-directory: ./karsajobs
+        run: |
+          cd karsajobs
+          go test -v -short --count=1 $(go list ./...)
 
-      - name: Log in to GitHub Container Registry
+      - name: Log in to GHCR
         run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ secrets.GHCR_USERNAME }} --password-stdin
 
-      - name: Build and Push Docker Image to GHCR
+      - name: Build and Push Docker Image
         run: |
+          cd karsajobs
           docker build -t ghcr.io/${{ secrets.GHCR_USERNAME }}/karsajobs:latest .
           docker push ghcr.io/${{ secrets.GHCR_USERNAME }}/karsajobs:latest
-        working-directory: ./karsajobs
