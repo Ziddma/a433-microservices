@@ -9,6 +9,10 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        working-directory: karsajobs
+
     steps:
       - name: Checkout source code
         uses: actions/checkout@v3
@@ -17,18 +21,14 @@ jobs:
         run: |
           echo "Current working directory:"
           pwd
-          echo "Contents of current directory:"
+          echo "Contents of working directory:"
           ls -l
-          echo "Contents of cmd directory:"
-          ls -l cmd || echo "cmd directory not found"
-          echo "Contents of pkg directory:"
-          ls -l pkg || echo "pkg directory not found"
 
       - name: Install Hadolint and Lint Dockerfile
         run: |
-          sudo wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/latest/download/hadolint-Linux-x86_64
-          sudo chmod +x /bin/hadolint
-          hadolint Dockerfile
+          wget -O hadolint https://github.com/hadolint/hadolint/releases/latest/download/hadolint-Linux-x86_64
+          chmod +x hadolint
+          ./hadolint Dockerfile
 
       - name: Set up Go
         uses: actions/setup-go@v4
