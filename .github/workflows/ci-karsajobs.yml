@@ -1,0 +1,37 @@
+name: CI for karsajobs
+
+on:
+  push:
+    branches:
+      - karsajobs
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout source code
+      uses: actions/checkout@v3
+
+    - name: Install Hadolint
+      run: |
+        sudo wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/latest/download/hadolint-Linux-x86_64
+        sudo chmod +x /bin/hadolint
+        hadolint Dockerfile
+
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: 1.20
+
+    - name: Run unit tests
+      run: go test -v -short --count=1 $(go list ./...)
+
+    - name: Login to GHCR
+      run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ secrets.GHCR_USERNAME }} --password-stdin
+
+    - name: Build and push Docker image
+      run: |
+        docker build -t ghcr.io/${{ secrets.GHCR_USERNAME }}/karsajobs:latest .
+        docker push ghcr.io/${{ secrets.GHCR_USERNAME }}/karsajobs:latest
+
