@@ -9,19 +9,18 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: karsajobs
-
     steps:
       - name: Checkout source code
         uses: actions/checkout@v3
+
+      - name: Debug directory structure
+        run: ls -l
 
       - name: Install Hadolint and Lint Dockerfile
         run: |
           sudo wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/latest/download/hadolint-Linux-x86_64
           sudo chmod +x /bin/hadolint
-          hadolint Dockerfile
+          hadolint karsajobs/Dockerfile
 
       - name: Set up Go
         uses: actions/setup-go@v4
@@ -36,5 +35,5 @@ jobs:
 
       - name: Build and push Docker image
         run: |
-          docker build -t ghcr.io/${{ secrets.GHCR_USERNAME }}/karsajobs:latest .
+          docker build -t ghcr.io/${{ secrets.GHCR_USERNAME }}/karsajobs:latest karsajobs
           docker push ghcr.io/${{ secrets.GHCR_USERNAME }}/karsajobs:latest
