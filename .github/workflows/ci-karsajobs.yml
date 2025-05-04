@@ -9,10 +9,6 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: karsajobs
-
     steps:
       - name: Checkout source code
         uses: actions/checkout@v3
