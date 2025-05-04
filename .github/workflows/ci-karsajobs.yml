@@ -5,10 +5,6 @@ on:
     branches:
       - karsajobs
 
-defaults:
-  run:
-    working-directory: .
-
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
@@ -30,7 +26,6 @@ jobs:
 
       - name: Run unit tests
         run: go test -v -short --count=1 ./...
-        working-directory: karsajobs
 
       - name: Login to GHCR
         run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ secrets.GHCR_USERNAME }} --password-stdin
