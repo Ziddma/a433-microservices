@@ -19,6 +19,10 @@ jobs:
           pwd
           echo "Contents of current directory:"
           ls -l
+          echo "Contents of cmd directory:"
+          ls -l cmd || echo "cmd directory not found"
+          echo "Contents of pkg directory:"
+          ls -l pkg || echo "pkg directory not found"
 
       - name: Install Hadolint and Lint Dockerfile
         run: |
@@ -32,7 +36,7 @@ jobs:
           go-version: 1.20
 
       - name: Run unit tests
-        run: go test -v -short --count=1 $(go list ./...)
+        run: go test -v -short --count=1 ./...
 
       - name: Login to GHCR
         run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ secrets.GHCR_USERNAME }} --password-stdin
