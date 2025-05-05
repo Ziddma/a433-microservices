@@ -1,29 +1,35 @@
 name: CI for karsajobs-ui
+# Nama workflow untuk CI aplikasi frontend karsajobs-ui.
 
 on:
   push:
     branches:
       - karsajobs-ui
+      # Workflow akan berjalan saat ada push ke branch `karsajobs-ui`.
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    # Workflow dijalankan di runner Ubuntu terbaru.
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
+        # Mengambil kode dari repository.
 
-    - name: Install Hadolint
-      run: |
-        sudo wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/latest/download/hadolint-Linux-x86_64
-        sudo chmod +x /bin/hadolint
-        hadolint Dockerfile
+      - name: Install Hadolint
+        run: |
+          sudo wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/latest/download/hadolint-Linux-x86_64
+          sudo chmod +x /bin/hadolint
+          hadolint Dockerfile
+        # Menginstal Hadolint dan memeriksa Dockerfile.
 
-    - name: Login to GHCR
-      run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ secrets.GHCR_USERNAME }} --password-stdin
+      - name: Login to GHCR
+        run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ secrets.GHCR_USERNAME }} --password-stdin
+        # Login ke GitHub Container Registry (GHCR) menggunakan secrets.
 
-    - name: Build and push Docker image
-      run: |
-        docker build -t ghcr.io/${{ secrets.GHCR_USERNAME }}/karsajobs-ui:latest .
-        docker push ghcr.io/${{ secrets.GHCR_USERNAME }}/karsajobs-ui:latest
-
+      - name: Build and push Docker image
+        run: |
+          docker build -t ghcr.io/${{ secrets.GHCR_USERNAME }}/karsajobs-ui:latest .
+          docker push ghcr.io/${{ secrets.GHCR_USERNAME }}/karsajobs-ui:latest
+        # Membangun dan mendorong image Docker untuk aplikasi frontend ke GHCR.
